@@ -4,6 +4,7 @@ import java.io.IOException;
 
 
 import vn.iotstar.services.*;
+import vn.iotstar.utils.Constant;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -15,8 +16,7 @@ import vn.iotstar.models.User;
 @SuppressWarnings("serial")
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet{
-	public static final String SESSION_USERNAME = "username";
-	public static final String COOKIE_REMEMBER = "username";
+	
 
 	
 	
@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet{
 	    }
 	
 	    // Nếu không có session và cookie, chuyển hướng đến trang đăng nhập
-	    req.getRequestDispatcher("bt_web_t3/login.jsp").forward(req, resp);
+	    req.getRequestDispatcher("/view/login.jsp").forward(req, resp);
 	}
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -66,7 +66,7 @@ public class LoginController extends HttpServlet{
 	    if (username.isEmpty() || password.isEmpty()) {
 	        alertMsg = "Tài khoản hoặc mật khẩu không được rỗng";
 	        req.setAttribute("alert", alertMsg);
-	        req.getRequestDispatcher("bt_web_t3/login.jsp").forward(req, resp);
+	        req.getRequestDispatcher("view/login.jsp").forward(req, resp);
 	        return;
 	    }
 
@@ -83,14 +83,21 @@ public class LoginController extends HttpServlet{
 	    } else {
 	        alertMsg = "Tài khoản hoặc mật khẩu không đúng";
 	        req.setAttribute("alert", alertMsg);
-	        req.getRequestDispatcher("/views/login.jsp").forward(req, resp);
+	        req.getRequestDispatcher("view/login.jsp").forward(req, resp);
 	    }
 	}
 	
 	private void saveRemeberMe(HttpServletResponse response, String username) {
-	    Cookie cookie = new Cookie(COOKIE_REMEMBER, username);
+	    Cookie cookie = new Cookie(Constant.COOKIE_REMEMBER, username);
 	    cookie.setMaxAge(30 * 60); // Cookie tồn tại trong 30 phút
 	    response.addCookie(cookie);
+	}
+	
+	public static void main(String[] args) {
+		IUserService service = new UserServiceImpl();
+	    User user = service.login("donnc", "123");
+	    System.out.print(user);
+	    
 	}
 
 }

@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 
 import vn.iotstar.configs.DBConnectSQL;
 import vn.iotstar.dao.IUserDao;
+
+import java.util.ArrayList;
+import java.util.List;
 import vn.iotstar.models.User;
 
 
@@ -13,6 +16,32 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
 	public Connection conn = null;
 	public PreparedStatement ps = null;
 	public ResultSet rs = null;
+	
+	public User Get(int id) {
+		String sql = "SELECT * FROM [User] WHERE id = ?";
+		try {
+	        conn = new DBConnectSQL().getConnection();
+	        ps = conn.prepareStatement(sql);
+	        ps.setInt(1, id);
+	        rs = ps.executeQuery();
+	        while (rs.next()) {
+	            User user = new User();
+	            user.setId(rs.getInt("id"));
+	            user.setEmail(rs.getString("email"));
+	            user.setUserName(rs.getString("username"));
+	            user.setFullName(rs.getString("fullname"));
+	            user.setPassWord(rs.getString("password"));
+	            user.setImages(rs.getString("images"));
+	            user.setRoleid(Integer.parseInt(rs.getString("roleid")));
+	            user.setPhone(rs.getString("phone"));
+	            user.setCreatedDate(rs.getDate("createdDate"));
+	            return user;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
 	
 	@Override
 	public User findByUserName(String username) {
@@ -23,13 +52,13 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
 	        ps.setString(1, username);
 	        rs = ps.executeQuery();
 	        while (rs.next()) {
-	            vn.iotstar.models.User user = new User();
+	            User user = new User();
 	            user.setId(rs.getInt("id"));
 	            user.setEmail(rs.getString("email"));
 	            user.setUserName(rs.getString("username"));
 	            user.setFullName(rs.getString("fullname"));
 	            user.setPassWord(rs.getString("password"));
-	            user.setAvatar(rs.getString("avatar"));
+	            user.setImages(rs.getString("images"));
 	            user.setRoleid(Integer.parseInt(rs.getString("roleid")));
 	            user.setPhone(rs.getString("phone"));
 	            user.setCreatedDate(rs.getDate("createdDate"));
@@ -43,7 +72,7 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
 
 	@Override
 	public void insert(User user) {
-	    String sql = "INSERT INTO [User](email, username, fullname, password, avatar, roleid, phone, createddate) " +
+	    String sql = "INSERT INTO [User](email, username, fullname, password, images, roleid, phone, createddate) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
    try {
@@ -56,7 +85,7 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
        ps.setString(2, user.getUserName());
        ps.setString(3, user.getFullName());
        ps.setString(4, user.getPassWord());
-       ps.setString(5, user.getAvatar());
+       ps.setString(5, user.getImages());
        ps.setInt(6, user.getRoleid());
        ps.setString(7, user.getPhone());
        ps.setDate(8, user.getCreatedDate());
@@ -77,11 +106,29 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
    }
 		
 	}
-
+	
+	@Override
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE [User] SET password = ? WHERE email = ?";
+        
+        try {
+        	conn = new DBConnectSQL().getConnection();
+            ps = conn.prepareStatement(sql);
+             
+            ps.setString(1, newPassword);  // Đặt mật khẩu mới đã mã hóa
+            ps.setString(2, email);           // Đặt email người dùng
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;  // Nếu cập nhật thành công, trả về true
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;  // Nếu có lỗi xảy ra, trả về false
+    }
 	@Override
 	public boolean checkExistEmail(String email) {
 	    boolean duplicate = false;
-	    String query = "SELECT * FROM [user] WHERE email = ?";
+	    String query = "SELECT * FROM [User] WHERE email = ?";
 
 	    try {
 	        // Kết nối cơ sở dữ liệu
@@ -179,8 +226,44 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
 
 	    return exists;
 	}
-	
-	
 
-
+	@Override
+	public List<User> findAll() {
+		List<User> users = new ArrayList<>();
+	    String sql = "SELECT * FROM [User]";
+	    try {
+	        Connection conn = new DBConnectSQL().getConnection();
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        while (rs.next()) {
+	            User user = new User();
+	            user.setId(rs.getInt("id"));
+	            user.setEmail(rs.getString("email"));
+	            user.setUserName(rs.getString("username"));
+	            user.setFullName(rs.getString("fullname"));
+	            user.setPassWord(rs.getString("password"));
+	            user.setImages(rs.getString("images"));
+	            user.setRoleid(rs.getInt("roleid"));
+	            user.setPhone(rs.getString("phone"));
+	            user.setCreatedDate(rs.getDate("createdDate"));
+	            
+	            users.add(user);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return users;
+	}
+	
+	public static void main(String[] args) {
+		try {
+			IUserDao userDao = new UserDaoImpl();
+			userDao.updatePassword("donnc@gmail.com", "111");
+			System.out.print(userDao.findByUserName("donnc"));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

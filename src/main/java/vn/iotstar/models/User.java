@@ -10,8 +10,8 @@ public class User implements Serializable{
 	private String email;
 	private String userName;
 	private String fullName;
-	private String passWord;
-	private String avatar;
+	private String password;
+	private String images;
 	private int roleid;
 	private String phone;
 	private Date createdDate;
@@ -25,8 +25,8 @@ public class User implements Serializable{
 		this.email = email;
 		this.userName = userName;
 		this.fullName = fullName;
-		this.passWord = passWord;
-		this.avatar = avatar;
+		this.password = passWord;
+		this.images = avatar;
 		this.roleid = roleid;
 		this.phone = phone;
 		this.createdDate = createdDate;
@@ -56,16 +56,16 @@ public class User implements Serializable{
 		this.fullName = fullName;
 	}
 	public String getPassWord() {
-		return passWord;
+		return password;
 	}
 	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+		this.password = passWord;
 	}
-	public String getAvatar() {
-		return avatar;
+	public String getImages() {
+		return images;
 	}
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public void setImages(String avatar) {
+		this.images = avatar;
 	}
 	public int getRoleid() {
 		return roleid;
@@ -88,7 +88,7 @@ public class User implements Serializable{
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", fullName=" + fullName
-				+ ", passWord=" + passWord + ", avatar=" + avatar + ", roleid=" + roleid + ", phone=" + phone
+				+ ", passWord=" + password + ", avatar=" + images + ", roleid=" + roleid + ", phone=" + phone
 				+ ", createdDate=" + createdDate + "]";
 	}
 	

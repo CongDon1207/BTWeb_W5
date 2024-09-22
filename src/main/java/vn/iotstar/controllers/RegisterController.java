@@ -5,17 +5,20 @@ import java.io.IOException;
 
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import vn.iotstar.services.*;
-
+import vn.iotstar.utils.Constant;
+@WebServlet(urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
-	public static final String REGISTER = "/views/register.jsp";
+	
 	@Override
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    HttpSession session = req.getSession(false);
 
@@ -39,7 +42,7 @@ public class RegisterController extends HttpServlet{
 	    }
 
 	    // Chuyển hướng tới trang đăng ký nếu không có session hoặc cookie
-	    req.getRequestDispatcher(REGISTER).forward(req, resp);
+	    req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 
 	}
 	@SuppressWarnings("static-access")
@@ -64,7 +67,7 @@ public class RegisterController extends HttpServlet{
 	    if (service.checkExistEmail(email)) {
 	        alertMsg = "Email đã tồn tại!";
 	        req.setAttribute("alert", alertMsg);
-	        req.getRequestDispatcher(REGISTER).forward(req, resp);
+	        req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 	        return;
 	    }
 
@@ -72,12 +75,12 @@ public class RegisterController extends HttpServlet{
 	    if (service.checkExistUsername(username)) {
 	        alertMsg = "Tài khoản đã tồn tại!";
 	        req.setAttribute("alert", alertMsg);
-	        req.getRequestDispatcher(REGISTER).forward(req, resp);
+	        req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 	        return;
 	    }
 
 	    // Đăng ký người dùng mới
-	    boolean isSuccess = service.register(username, password, email, fullname, phone);
+	    boolean isSuccess = service.register(email, password, username,  fullname, phone);
 
 	    // Kiểm tra trạng thái của việc đăng ký
 	    if (isSuccess) {
@@ -89,7 +92,11 @@ public class RegisterController extends HttpServlet{
 	    } else {
 	        alertMsg = "System error!";
 	        req.setAttribute("alert", alertMsg);
-	        req.getRequestDispatcher(REGISTER).forward(req, resp);
+	        req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 	    }
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }

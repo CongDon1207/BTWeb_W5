@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri = "jakarta.tags.core" %>
+<%@ taglib prefix ="fmt" uri = "jakarta.tags.fmt"%>
+<%@ taglib prefix = "fn" uri = "jakarta.tags.functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,6 +61,9 @@
 <div class="login-container">
     <h2>Login</h2>
     <form action="<%=request.getContextPath()%>/login" method="post">
+    	<c:if test = "${alert != null }">
+    		<h3 class = "alert alert danger">${alert}</h3>
+    	</c:if>	
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
@@ -66,9 +72,16 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
         </div>
-        <input type="submit" value="Login">
+        <div class ="form-check">
+	        <input type="checkbox" class="form-check-input" id="remember" name = "remember">
+			<label class="form-check-label" for="remember">RememberMe</label>
+        </div>
+        <div>
+        	<br><input type="submit" value="Login">
+        </div>
+        
         <div class="forgot-password">
-            <a href="#">Forgot Password?</a>
+            <a href="/bt_web_t3/forgotpassword">Forgot Password?</a>
         </div>
     </form>
 </div>
@@ -78,3 +91,45 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

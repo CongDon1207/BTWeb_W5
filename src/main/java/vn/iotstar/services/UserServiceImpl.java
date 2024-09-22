@@ -15,11 +15,6 @@ public class UserServiceImpl implements IUserService{
 	    return null;
 	}
 
-	@Override
-	public User get(String username) {
-		return this.findByUserName(username);
-	}
-	
 	public User findByUserName(String username) {
 		return userDao.findByUserName(username);
 	}
@@ -41,7 +36,17 @@ public class UserServiceImpl implements IUserService{
 	    java.sql.Date date = new java.sql.Date(millis);
 
 	    // Chèn thông tin người dùng mới vào cơ sở dữ liệu
-	    User newUser = new User(0, email, username, fullname, password, null, 5, phone, date);
+	 // Chèn thông tin người dùng mới vào cơ sở dữ liệu
+	    User newUser = new User();
+	    newUser.setEmail(email);
+	    newUser.setUserName(username);
+	    newUser.setFullName(fullname);
+	    newUser.setPassWord(password);
+	    newUser.setPhone(phone);
+	    newUser.setCreatedDate(date);
+	    newUser.setRoleid(2);
+	    newUser.setImages("");
+
 	    userDao.insert(newUser);
 
 	    return true;
@@ -61,5 +66,16 @@ public class UserServiceImpl implements IUserService{
 	@Override
 	public boolean checkExistPhone(String phone) {
 		return userDao.checkExistPhone(phone);
+	}
+	
+	public boolean updatePassword(String email, String newPassword) {
+        
+        return userDao.updatePassword(email, newPassword);
+    }
+	
+	public static void main(String[] args) {
+		IUserService userService = new UserServiceImpl();
+		User user = userService.findByUserName("donnc");
+		System.out.print(user.getPassWord().equals("123"));
 	}
 }
