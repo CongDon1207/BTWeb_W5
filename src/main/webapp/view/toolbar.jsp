@@ -42,10 +42,13 @@
             <c:when test="${sessionScope.account == null}">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/view/login.jsp">Đăng nhập</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/view/register.jsp">Đăng ký</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/register">Đăng ký</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/profile">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa fa-search search-button"></i></a>
@@ -62,6 +65,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/logout">Đăng Xuất</a>
                     </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa fa-search search-button"></i></a>
                     </li>
