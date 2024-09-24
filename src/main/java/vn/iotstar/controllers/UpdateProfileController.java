@@ -2,6 +2,7 @@ package vn.iotstar.controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -45,50 +46,57 @@ public class UpdateProfileController extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// Lấy dữ liệu từ form
-		
-        String fullname = req.getParameter("fullname");
-        String phone = req.getParameter("phone");
-        System.out.println(fullname);
-        System.out.println(phone);
+	    String fullname = req.getParameter("fullname");
+	    String phone = req.getParameter("phone");
+	    System.out.println(fullname);
+	    System.out.println(phone);
 
-        // Thư mục upload
-        File uploadDir = new File(UPLOAD_DIRECTORY);
-        if (!uploadDir.exists()) uploadDir.mkdir();
+	    // Thư mục upload
+	    String uploadPath = getServletContext().getRealPath("/") + UPLOAD_DIRECTORY;
+	    File uploadDir = new File(uploadPath);
+	    if (!uploadDir.exists()) uploadDir.mkdir();
 
-        // Xử lý phần upload file
-        try {
-            String fileName = "";
-            for (Part part : req.getParts()) {
-                if (part.getName().equals("profileImage")) {
-                    fileName = extractFileName(part);
-                    part.write(UPLOAD_DIRECTORY + File.separator + fileName);
-                }
-            }
-            HttpSession session = req.getSession();
-            User u = (User) session.getAttribute("account"); // Lấy User từ session
+	    // Xử lý phần upload file
+	    String fileName = "";
+	    try {
+	        for (Part part : req.getParts()) {
+	            if (part.getName().equals("profileImage")) {
+	                fileName = extractFileName(part);
+	                part.write(uploadPath + File.separator + fileName);
+	            }
+	        }
+
+	        HttpSession session = req.getSession();
+	        User u = (User) session.getAttribute("account"); // Lấy User từ session
 	        String username = u.getUserName(); // Lấy username từ User object 
-	        req.setAttribute("username", username);
-            
-            System.out.print("**** " + username + " ****");
-            IUserService service = new UserServiceImpl();
-            boolean isUpdated = service.updateProfile(username, fullname, phone, UPLOAD_DIRECTORY + File.separator + fileName);
+	        IUserService service = new UserServiceImpl();
+	        boolean isUpdated = service.updateProfile(username, fullname, phone, uploadPath + File.separator + fileName);
 
-            if (isUpdated) {
-                req.setAttribute("message", "Profile updated successfully with the image " + fileName);
-            } else {
-                req.setAttribute("message", "Failed to update profile. Please try again.");
-            }
-            
-            req.setAttribute("message", "Profile updated successfully with the image " + fileName);
-            req.setAttribute("fullname", fullname);
-            req.setAttribute("phone", phone);
-            req.setAttribute("imagePath", UPLOAD_DIRECTORY + File.separator + fileName);
+	        // Thiết lập nội dung trả về
+	        resp.setContentType("text/html");
+	        PrintWriter out = resp.getWriter();
 
-        } catch (Exception e) {
-            req.setAttribute("message", "There was an error: " + e.getMessage());
-        }
+	        // Tạo phản hồi HTML
+	        out.println("<html><body>");
+	        if (isUpdated) {
+	            out.println("<h3>Profile updated successfully with the image " + fileName + "</h3>");
+	        } else {
+	            out.println("<h3>Failed to update profile. Please try again.</h3>");
+	        }
+	        out.println("<p>Full name: " + fullname + "</p>");
+	        out.println("<p>Phone: " + phone + "</p>");
+	        out.println("<img src='" + req.getContextPath() + "/uploads/" + fileName + "' alt='Profile Image' width='150' height='150' />");
+	        out.println("</body></html>");
+	        System.out.println("File saved at: " + uploadPath + File.separator + fileName);
 
-        // Forward tới trang kết quả
-        getServletContext().getRequestDispatcher("/view/profile.jsp").forward(req, resp);
+
+	    } catch (Exception e) {
+	        // Thiết lập nội dung phản hồi lỗi
+	        resp.setContentType("text/html");
+	        PrintWriter out = resp.getWriter();
+	        out.println("<html><body>");
+	        out.println("<h3>There was an error: " + e.getMessage() + "</h3>");
+	        out.println("</body></html>");
+	    }
 	}
 }
