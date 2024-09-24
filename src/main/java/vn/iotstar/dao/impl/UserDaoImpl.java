@@ -256,6 +256,29 @@ public class UserDaoImpl extends DBConnectSQL implements IUserDao{
 	    return users;
 	}
 	
+
+
+	@Override
+	public boolean updateProfile(String username, String fullname, String phone, String imagePath) {
+		String sql = "UPDATE [User] SET fullname = ?, phone = ?, images = ? WHERE username = ?";
+        
+        try {
+        	conn = new DBConnectSQL().getConnection();
+            ps = conn.prepareStatement(sql);
+             
+            ps.setString(1, fullname);
+            ps.setString(2, phone);
+            ps.setString(3, imagePath);  
+            ps.setString(4, username);
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;  // Nếu cập nhật thành công, trả về true
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;  // Nếu có lỗi xảy ra, trả về false
+	}
+	
 	public static void main(String[] args) {
 		try {
 			IUserDao userDao = new UserDaoImpl();

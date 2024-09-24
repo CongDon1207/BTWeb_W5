@@ -73,6 +73,10 @@ public class UserServiceImpl implements IUserService{
         return userDao.updatePassword(email, newPassword);
     }
 	
+	public boolean updateProfile(String username, String fullname, String phone, String imagePath) {
+		return userDao.updateProfile(username, fullname, phone, imagePath);
+	}
+	
 	public static void main(String[] args) {
 		IUserService userService = new UserServiceImpl();
 		User user = userService.findByUserName("donnc");

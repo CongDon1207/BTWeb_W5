@@ -40,7 +40,7 @@
 				        <li>
 				            <span class="nav-username">Xin chào, <strong>${username}</strong></span>
 				        </li>
-				        <li><a href="${pageContext.request.contextPath}/profile">Update Profile</a></li>
+				        <li><a href="${pageContext.request.contextPath}/updateprofile">Update Profile</a></li>
 				        <li><a href="${pageContext.request.contextPath}/logout">Log out</a></li>
 				    </ul>
 				</div>
