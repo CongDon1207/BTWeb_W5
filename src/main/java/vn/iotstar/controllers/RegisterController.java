@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import vn.iotstar.services.*;
+import vn.iotstar.services.impl.UserServiceImpl;
 import vn.iotstar.utils.Constant;
 @WebServlet(urlPatterns = {"/register"})
 public class RegisterController extends HttpServlet{

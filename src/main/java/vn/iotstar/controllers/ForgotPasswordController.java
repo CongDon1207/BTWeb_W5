@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import vn.iotstar.services.IUserService;
-import vn.iotstar.services.UserServiceImpl;
+import vn.iotstar.services.impl.UserServiceImpl;
 
 @WebServlet(urlPatterns = {"/forgotpassword"})
 public class ForgotPasswordController extends HttpServlet {

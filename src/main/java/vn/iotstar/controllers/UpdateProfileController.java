@@ -14,7 +14,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import vn.iotstar.models.User;
 import vn.iotstar.services.IUserService;
-import vn.iotstar.services.UserServiceImpl;
+import vn.iotstar.services.impl.UserServiceImpl;
+import vn.iotstar.utils.Constant;
 @WebServlet(urlPatterns = {"/updateprofile"})
 
 @MultipartConfig(
@@ -28,7 +29,7 @@ public class UpdateProfileController extends HttpServlet{
 	 */
 	private static final long serialVersionUID = -7569691220550706686L;
 	// Path where the uploaded files will be saved
-    private static final String UPLOAD_DIRECTORY = "uploads"; 
+    
 
     // This method extracts file name from the Part object
     private String extractFileName(Part part) {
@@ -52,7 +53,7 @@ public class UpdateProfileController extends HttpServlet{
 	    System.out.println(phone);
 
 	    // Thư mục upload
-	    String uploadPath = getServletContext().getRealPath("/") + UPLOAD_DIRECTORY;
+	    String uploadPath = Constant.DIR;
 	    File uploadDir = new File(uploadPath);
 	    if (!uploadDir.exists()) uploadDir.mkdir();
 
@@ -85,7 +86,8 @@ public class UpdateProfileController extends HttpServlet{
 	        }
 	        out.println("<p>Full name: " + fullname + "</p>");
 	        out.println("<p>Phone: " + phone + "</p>");
-	        out.println("<img src='" + req.getContextPath() + "/uploads/" + fileName + "' alt='Profile Image' width='150' height='150' />");
+	        out.println("<img src='" + req.getContextPath() + "/image?fname=" + fileName + "' alt='Profile Image' width='150' height='150' />");
+
 	        out.println("</body></html>");
 	        System.out.println("File saved at: " + uploadPath + File.separator + fileName);
 

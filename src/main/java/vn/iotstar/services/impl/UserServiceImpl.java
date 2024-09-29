@@ -1,6 +1,7 @@
-package vn.iotstar.services;
+package vn.iotstar.services.impl;
 
 import vn.iotstar.models.User;
+import vn.iotstar.services.IUserService;
 import vn.iotstar.dao.*;
 import vn.iotstar.dao.impl.UserDaoImpl;
 
