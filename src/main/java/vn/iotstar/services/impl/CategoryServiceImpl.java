@@ -5,6 +5,7 @@ import java.util.List;
 
 import vn.iotstar.models.Category;
 import vn.iotstar.services.ICategoryService;
+import vn.iotstar.utils.Constant;
 import vn.iotstar.dao.impl.*;
 import vn.iotstar.dao.ICategoryDao;
 
@@ -23,13 +24,13 @@ public class CategoryServiceImpl implements ICategoryService{
 
 	    // Cập nhật tên của Category
 	    oldCategory.setCategoryname(newCategory.getCategoryname());
+        oldCategory.setStatus(newCategory.getStatus());
 
 	    // Kiểm tra xem có icon mới hay không
 	    if (newCategory.getImages() != null) {
 	        // Xóa ảnh cũ
 	        String fileName = oldCategory.getImages();
-	        final String dir = "E:\\upload";
-	        File file = new File(dir + "/category" + fileName);
+	        File file = new File(Constant.DIR + "/category" + fileName);
 	        
 	        if (file.exists()) {
 	            file.delete(); // Xóa file nếu tồn tại
@@ -37,6 +38,7 @@ public class CategoryServiceImpl implements ICategoryService{
 
 	        // Cập nhật icon mới
 	        oldCategory.setImages(newCategory.getImages());
+
 	    }
 
 	    // Cập nhật dữ liệu của Category vào CSDL
@@ -69,5 +71,29 @@ public class CategoryServiceImpl implements ICategoryService{
 	public List<Category> search(String keyword) {
 		return categoryDao.search(keyword);
 	}
-
+	
+	public static void main(String[] args) {
+		
+		try {
+			ICategoryService cateService = new CategoryServiceImpl();
+			int categoryid = 2;
+	    	String categoryname = "iphone 16";
+	        
+	        int statuss = 0;
+	        String image = "white-goods.png";
+	        
+	        Category category = new Category();
+	        category.setCategoryId(categoryid);
+	        category.setCategoryname(categoryname);
+	        category.setImages(image);
+	        category.setStatus(statuss);
+	        
+	        cateService.edit(category);
+	        Category newcate = cateService.get(2);
+	        System.out.print(newcate.getCategoryname());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/common/taglib.jsp"%>
-<form action="${pageContext.request.contextPath}/admin/category/insert" method="post" enctype="multipart/form-data">
+<form action="${pageContext.request.contextPath}/admin/category/update" method="post" enctype="multipart/form-data">
+	<input type="text" id="categoryid" name="categoryid" value = "${cate.categoryId}" hidden = "hidden"><br>
     <label for="categoryname">Category Name:</label><br>
     <input type="text" id="categoryname" name="categoryname" value = "${cate.categoryname}"><br>
     

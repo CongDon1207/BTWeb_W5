@@ -38,13 +38,15 @@ public class CategoryDaoImpl extends DBConnectSQL implements ICategoryDao{
 
 	@Override
 	public void edit(Category category) {
-		String sql = "UPDATE Category SET categoryname = ?, images = ? WHERE categoryId = ?";
+		String sql = "UPDATE Category SET categoryname = ?, images = ?, status = ? WHERE categoryId = ?";
 		try {
 			conn = new DBConnectSQL().getConnection();
 		    ps = conn.prepareStatement(sql);
 		    ps.setString(1, category.getCategoryname());
 		    ps.setString(2, category.getImages());
-		    ps.setInt(3, category.getCategoryId());
+		    ps.setInt(3, category.getStatus());
+		    ps.setInt(4, category.getCategoryId());
+		    ps.executeUpdate();
 		    
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -197,17 +199,18 @@ public class CategoryDaoImpl extends DBConnectSQL implements ICategoryDao{
 	public static void main(String[] args) {
 		try {
 			ICategoryDao dao = new CategoryDaoImpl();
-			String categoryname = "Oppo1";
+			String categoryname = "Oppo12";
 	        
-	        int statuss = 1;
+	        int statuss = 0;
 	        String image = "https://cdn11.dienmaycholon.vn/filewebdmclnew/DMCL21/Picture/Apro/Apro_product_33149/oppo-a58_main_172.png";
 	        
 	        Category category = new Category();
 	        category.setCategoryname(categoryname);
 	        category.setImages(image);
 	        category.setStatus(statuss);
-	        dao.insert(category);
-	        System.out.print(dao.get(categoryname));
+	        category.setCategoryId(7);
+	        dao.edit(category);
+	        System.out.print(dao.get(7).getCategoryname());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
